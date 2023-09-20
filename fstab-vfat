@@ -1,0 +1,3 @@
+# fstab rule to mount vfat partitions
+
+/dev/hdb1 /media/storage vfat user,owner,utf8,rw,umask=000 0 0
