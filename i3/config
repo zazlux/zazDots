@@ -1,0 +1,372 @@
+# Start XDG autostart .desktop files using dex. See also
+# https://wiki.archlinux.org/index.php/XDG_Autostart
+exec --no-startup-id dex --autostart --environment i3
+
+set $mod Mod4
+
+set $left  Left
+set $down  Down
+set $up    Up
+set $right Right
+
+# hackerman VI-navigation (enable with caution)
+# set $left  h
+# set $down  j
+# set $up    k
+# set $right l
+
+# bloated workspace name variables from the OG config
+set $ws1 "1:"
+set $ws2 "2:"
+set $ws3 "3:"
+set $ws4 "4:"
+set $ws5 "5:"
+set $ws6 "6:"
+
+# default/starting workspace (without this line, 
+# "zen" will be the default workspace).
+# primary is the name of the output.
+workspace $ws1 output primary
+
+# toggle floating state            | i3fyra
+# -----------------------------------------------
+bindsym $mod+Shift+space      exec --no-startup-id i3fyra --float
+# making a floating window tiled with the keybinding
+# above will automatically enable the i3fyra layout
+# on the active workspace.
+
+# splitsizes in the i3fyra layout
+# -----------------------------------------------
+set $layout 'AB=-350 AC=220 BD=252'
+
+# by executing below command with i3 the layout
+# will be configured before it is created
+exec --no-startup-id i3fyra --layout $layout
+
+# use this keybinding to restore the layout
+bindsym $mod+p exec --no-startup-id i3fyra --layout $layout
+
+# change focus                     | i3viswiz
+# -----------------------------------------------
+bindsym $mod+$left            exec --no-startup-id i3viswiz left
+bindsym $mod+$down            exec --no-startup-id i3viswiz down
+bindsym $mod+$up              exec --no-startup-id i3viswiz up
+bindsym $mod+$right           exec --no-startup-id i3viswiz right
+
+# focus within a group (flip tabs) | i3flip
+# -----------------------------------------------
+bindsym $mod+Tab              exec --no-startup-id i3flip next
+bindsym $mod+Shift+Tab        exec --no-startup-id i3flip perv
+
+# move within a group              | i3flip --move
+# -----------------------------------------------
+bindsym $mod+w                exec --no-startup-id i3flip --move next
+bindsym $mod+q                exec --no-startup-id i3flip --move perv
+
+# zentered container and workspace | i3zen
+# if the window is already there, move it back to
+# where it came from.
+bindsym $mod+z exec --no-startup-id i3zen --workspace zen
+
+# focus the zen workspace
+bindsym $mod+Shift+z workspace zen
+
+# move a window                   | i3Kornhe move
+# -----------------------------------------------
+bindsym $mod+Shift+$left      exec --no-startup-id i3Kornhe move --speed 0 left
+bindsym $mod+Shift+$down      exec --no-startup-id i3Kornhe move --speed 0 down
+bindsym $mod+Shift+$up        exec --no-startup-id i3Kornhe move --speed 0 up
+bindsym $mod+Shift+$right     exec --no-startup-id i3Kornhe move --speed 0 right
+
+# resize a window                 | i3Kornhe size
+# -----------------------------------------------
+bindsym $mod+Control+$left    exec --no-startup-id i3Kornhe size --speed 30 left
+bindsym $mod+Control+$down    exec --no-startup-id i3Kornhe size --speed 30 down
+bindsym $mod+Control+$up      exec --no-startup-id i3Kornhe size --speed 30 up
+bindsym $mod+Control+$right   exec --no-startup-id i3Kornhe size --speed 30 right
+
+# "sizemode" is needed for i3Kornhe to work. It is
+# entered automatically if the window is floating
+# and i3Kornhe move/size is executed
+mode "sizemode" {
+
+  bindsym $left               exec --no-startup-id i3Kornhe --speed 30 left
+  bindsym $down               exec --no-startup-id i3Kornhe --speed 30 down
+  bindsym $up                 exec --no-startup-id i3Kornhe --speed 30 up
+  bindsym $right              exec --no-startup-id i3Kornhe --speed 30 right
+
+  bindsym Shift+$left         exec --no-startup-id i3Kornhe --speed 5 left
+  bindsym Shift+$down         exec --no-startup-id i3Kornhe --speed 5 down
+  bindsym Shift+$up           exec --no-startup-id i3Kornhe --speed 5 up
+  bindsym Shift+$right        exec --no-startup-id i3Kornhe --speed 5 right
+
+  bindsym $mod+Control+$left  exec --no-startup-id i3Kornhe size left
+  bindsym $mod+Control+$down  exec --no-startup-id i3Kornhe size down
+  bindsym $mod+Control+$up    exec --no-startup-id i3Kornhe size up
+  bindsym $mod+Control+$right exec --no-startup-id i3Kornhe size right
+
+  bindsym m exec --no-startup-id i3Kornhe move --speed 0 left
+
+  bindsym 1 exec --no-startup-id i3Kornhe 1
+  bindsym 2 exec --no-startup-id i3Kornhe 2
+  bindsym 3 exec --no-startup-id i3Kornhe 3
+  bindsym 4 exec --no-startup-id i3Kornhe 4
+  bindsym 5 exec --no-startup-id i3Kornhe 5
+  bindsym 6 exec --no-startup-id i3Kornhe 6
+  bindsym 7 exec --no-startup-id i3Kornhe 7
+  bindsym 8 exec --no-startup-id i3Kornhe 8
+  bindsym 9 exec --no-startup-id i3Kornhe 9
+
+  bindsym Escape exec --no-startup-id i3Kornhe x
+}
+
+
+# combine all layout in $mod+e , frees up $mod+w
+# (used for: i3flip --move next)
+# bindsym $mod+s layout stacking
+# bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle splith splitv tabbed stacking
+
+
+
+# untouched from the default config:
+# ==================================
+
+font pango:monospace 8
+
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+#exec --no-startup-id nm-applet
+
+set $refresh_i3status killall -SIGUSR1 i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+bindsym $mod+Return exec kitty -c ~/.config/kitty/kitty.conf
+
+bindsym $mod+Shift+q kill
+
+# The middle button over a titlebar kills the window
+bindsym --release button2 kill
+
+#bindsym $mod+d exec --no-startup-id  rofi -show-icons -mode -show drun -terminal kitty
+
+bindsym $mod+d exec --no-startup-id rofi -show drun -theme nord.rasi
+
+# when using hackerman VI-navigation you will need to
+# change the binding below ($mod+h == $mod+$left)
+bindsym $mod+h split h
+bindsym $mod+v split v
+
+bindsym $mod+a focus parent
+
+bindsym $mod+space focus mode_toggle
+
+bindsym $mod+f fullscreen toggle
+
+
+
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
+
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r exec "bash $HOME/.local/bin/reloader"
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+#bar {
+#        status_command /usr/bin/i3status -c $HOME/.config/i3status/config.toml
+#}
+
+bar {
+	tray_output primary
+	output VGA-1
+	output primary
+        status_command i3status
+	font pango:DejaVu Sans Mono, FontAwesome 7.5
+	status_command i3blocks -c ~/.config/i3/i3blocks.conf 
+	
+	i3bar_command i3bar --transparency
+	workspace_buttons yes
+	colors{
+
+		background #00000000 
+		statusline #4c7899
+		separator #4c7899
+
+		focused_workspace #00000000 #4c7899 #ffffff
+		active_workspace  #00000000 #00000000 #ffffff 
+		inactive_workspace #00000000 #00000000 #888888	
+		urgent_workspace #00000000 #00000000 #900000
+		binding_mode #00000000 #00000000 #900000 
+			
+	}
+
+}
+
+# center the window title
+title_align center
+
+
+# below are default bindings replaced by i3ass
+# ============================================
+
+# floating toggle --> i3fyra --float
+# -----------------------------------
+# bindsym $mod+Shift+space floating toggle
+
+# focus --> i3viswiz
+# -----------------------------------------------
+
+# bindsym $mod+$left   focus left
+# bindsym $mod+$down   focus down
+# bindsym $mod+$up     focus up
+# bindsym $mod+$right  focus right
+
+# move/resize --> i3Kornhe 
+# -----------------------------------------------
+
+# bindsym $mod+Shift+$left  move left
+# bindsym $mod+Shift+$down  move down
+# bindsym $mod+Shift+$up    move up
+# bindsym $mod+Shift+$right move right
+
+# mode "resize" {
+        # bindsym $left resize shrink width 10 px or 10 ppt
+        # bindsym $up resize grow height 10 px or 10 ppt
+        # bindsym $down resize shrink height 10 px or 10 ppt
+        # bindsym $right resize grow width 10 px or 10 ppt
+
+        # bindsym Return mode "default"
+        # bindsym Escape mode "default"
+        # bindsym $mod+r mode "default"
+# }
+
+# No need for a separate bindin to enter the mode 
+# -----------------------------------------------
+# bindsym $mod+r mode "resize"
+
+# Use one keybinding for all layout toggling
+# -----------------------------------------------
+
+# bindsym $mod+s layout stacking
+# bindsym $mod+w layout tabbed
+
+for_window [class="mpv"] floating enable
+for_window [class="qutebrowser"] floating enable
+
+# Screenshots
+bindsym Print exec $HOME/.local/bin/dmenu-screenshot
+#bindsym Print exec scrot '%c.png' -e 'mv "$f" ~/Pictures/scrot'
+#bindsym --release $mod+shift+s exec maim -s -u | xclip -selection clipboard -t image/png -i
+
+
+# bind program to workspace and focus to them on startup:
+assign [class="telegram-desktop"] $ws1
+assign [class="Brave-browser"] $ws2
+assign [class="element"] $ws3
+assign [class="Firefox-browser"] $ws2
+assign [class="bluefish"] $ws3
+assign [class="vlc"] $ws4
+assign [class="Thunar"] $ws5
+
+
+for_window [class=kitty] focus
+for_window [class=Thunar] focus
+for_window [class=qutebrowser] focus
+for_window [class=Thunderbird] focus
+for_window [class=subl] focus
+for_window [class=vlc] focus
+
+# Hide borders if there is only one child in a workspace or container
+hide_edge_borders smart_no_gaps
+
+# set border of floating window
+for_window [class="urxvt"] border pixel 1
+
+# set position for floating window
+for_window [class=".*"] move position center
+
+exec_always --no-startup-id bash /home/d1ws/.config/autostart/start-pipewire.sh
+
+exec --no-startup-id setxkbmap -option 'grp:alt_shift_toggle' -layout  fr,ara -variant 'azerty'
+
+#exec_always --no-startup-id "feh --bg-fill /home/d1ws/.walls/dark-night.jpg"
+#exec_always --no-startup-id "feh -b /home/d1ws/.walls/822.png"
+exec_always --no-startup-id "feh --bg-fill /home/d1ws/.walls/night-violet-tree-fantasy.jpg"
+#exec_always --no-startup-id "feh --bg-fill /home/d1ws/.walls/lake-night-huts-lanterns.jpg"
+
+#start dunst daemon
+exec --no-startup-id dbus-launch dunst --config ~/.config/dunst/dunstrc
+
+ #exec picom:
+exec --no-startup-id redshift &
+
+# start udiskie
+exec_always --no-startup-id "udiskie -f 'ranger' --tray"
+
+# launch thunar fm
+bindsym $mod+Shift+t exec "sleep 1; bash /home/d1ws/.local/bin/launch-thunar" 
+
+# launch cmus
+bindsym $mod+m exec --no-startup-id kitty -e cmus 
+for_window [instance=cmus] title_format "cmus", focus; exec --no-startup-id exec i3fyra -m 5
+###########################
+#Scratchpad ( https://i3wm.org/docs/userguide.html#_scratchpad )
+
+##########################
+
+# color defines for zenburn styled i3
+set $bg     #504852
+set $fg     #9f9f9f
+set $hi     #efef8f
+set $ac     #5B5141
+set $tx     #fff2cc
+set $ia     #bcbcbc
+set $be     #8faf9f
+set $yw     #ccdc90
+set $gn     #88b090
+set $rd     #e89393
+
+# set some nice colors      border     background  text
+client.focused              $ac        $ac         $tx
+client.unfocused            $bg        $bg         $ia
+client.focused_inactive     $bg        $bg         $ac
+client.urgent               $rd        $rd         $tx
+
+# mount android devices
+bindsym $mod+Shift+d exec "sleep 1; bash /home/d1ws/.local/bin/mount-android"
+
+# check updates
+bindsym $mod+Shift+p exec "sleep 1; bash /home/d1ws/.local/bin/upchk"
+
+# open youtube links on mpv
+bindsym --release $mod+b exec "sleep 1;bash ~/.local/bin/pop_mpv.sh"
+
+# change wallpepr
+bindsym $mod+Shift+w exec --no-startup-id bwp -p
+
+# unmute headphone
+bindsym $mod+alt+h exec bash -c "amixer -c 1 set Headphone unmute"
+
+# run awk ebook
+bindsym $mod+Shift+k exec bash "/home/d1ws/.local/bin/awkEbook"

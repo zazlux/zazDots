@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+
+
+
+ find "/home/$USER/Downloads"  -type f -name "*.torrent" | \
+  fzf -m --ansi --color fg:-1,bg:-1,hl:136,fg+:101,bg+:239,hl+:144 --color prompt:58,border:94 --height 40%  --border=rounded --margin=2 --prompt="➤  " --pointer="➤ " --marker="➤ " | xargs -I{} gopeed "$f" -D "$HOME/Downloads" {}
+

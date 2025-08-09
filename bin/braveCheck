@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+set -ue -o pipefail
+
+# some colors
+red=$'\033[0;31m'
+green=$'\033[0;32m'
+yellow=$'\033[0;33m'
+blue=$'\033[0;34m'
+normal=$'\033[0m'      # No Color
+
+
+# dumping the abyss repo brave version in a text file
+lynx --source https://codeberg.org/mobinmob/abyss-packages/src/branch/main/brave-browser/template | awk -F= '/version=/ {print $5}' > /tmp/tmp.txt
+
+# getting the system version
+sysVersion=$(brave-browser-stable --version | awk -F\. '{print $2"."$3"."$4}')
+
+# a dumb if statement to campre version numbers.
+if [[ "$sysVersion" != "$(cat /tmp/tmp.txt)" ]]
+then 
+    echo "${blue}New version is available.${normal}"
+    echo "${yellow}Your system version is: $(echo "${sysVersion//[a-Z]}")${normal}"
+    echo "${green}Abyss Repo version: "$(cat /tmp/tmp.txt)"${normal}"
+fi

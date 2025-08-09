@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+curl -L -I "$@" 2>&1 | awk '{ 
+if($0 ~ "200")   
+     print "Website is up" 
+  }' | uniq
+
+
+

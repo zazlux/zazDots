@@ -1,0 +1,388 @@
+input {
+    keyboard {
+        xkb {
+            layout "fr,ara"
+            variant ",azerty"
+            options "grp:alt_shift_toggle"
+        }
+    }
+
+
+
+    // Omitting touchpad settings disables them, or leaves them at their default values.
+touchpad {
+        tap
+        // dwt
+        // dwtp
+        // natural-scroll
+        // accel-speed 0.2
+        // accel-profile "flat"
+    }
+
+mouse {
+        // natural-scroll
+        // accel-speed 0.2
+        // accel-profile "flat"
+    }
+
+    // Uncomment this to make the mouse warp to the center of newly focused windows.
+    // warp-mouse-to-focus
+
+    // Focus windows and outputs automatically when moving the mouse into them.
+    focus-follows-mouse
+}
+
+output "VGA-1" {
+    mode  "1680x1050@60.000"
+    scale  1.00
+
+     }
+
+
+
+layout {
+    // Set gaps around windows in logical pixels.
+    gaps 6
+    center-focused-column "never"
+
+preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+
+        // fixed 1920
+    }
+
+focus-ring {
+        off
+    }
+
+border {
+        width 2
+        // active-color "#f38ba8"
+         active-color "#b4ad62"
+         inactive-color "#6c8433"
+
+       // active-gradient from="#bf616a" to="#f38ba8" angle=45 relative-to="workspace-view"
+       // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
+    }
+shadow {
+        on
+        softness 10
+        spread 3
+        offset x=0 y=2
+        draw-behind-window false
+        color "#00000080"
+        inactive-color "#00000060"
+    }
+insert-hint {
+        // off
+        color "#ffc87f80"
+        gradient from="#ffbb6680" to="#ffc88080" angle=45 relative-to="workspace-view"
+    }
+tab-indicator {
+        // off
+        hide-when-single-tab
+        place-within-column
+        gap 5
+        width 4
+        length total-proportion=1.0
+        position "left"
+        gaps-between-tabs 2
+        corner-radius 8
+        active-color "bf616a"
+        inactive-color "d08770"
+        // active-gradient from="#80c8ff" to="#bbddff" angle=45
+        // inactive-gradient from="#505050" to="#808080" angle=45 relative-to="workspace-view"
+    }
+}
+
+workspace "common"
+workspace "media"
+prefer-no-csd
+
+spawn-at-startup "dunst"
+//spawn-at-startup "nwg-panel"
+spawn-at-startup "pipewire"
+spawn-at-startup "wireplumber"
+spawn-at-startup "wlsunset" "-l" "30.417" "-L" "-9.599"
+//spawn-at-startup "swaybg" "-i" "/home/d1ws/.walls/ghibli.png"
+spawn-at-startup "swaybg" "-i" "/home/d1ws/.walls/lake-night-huts-lanterns.jpg"
+spawn-at-startup "/usr/libexec/polkit-gnome-authentication-agent-1"
+spawn-at-startup "udiskie" "-ans"
+spawn-at-startup "/home/d1ws/.config/niri/swayidle.sh"
+spawn-at-startup "/home/d1ws/.config/niri/swaybg.sh"
+spawn-at-startup "waybar" "-c" "/home/d1ws/.config/waybar/config" "-s" "/home/d1ws/.config/waybar/style.css"
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+environment {
+    DISPLAY ":0"
+    XDG_CURRENT_DESKTOP "niri"
+    DISPLAY null
+    XDG_SESSION_TYPE "wayland"
+    QT_QPA_PLATFORM "wayland"
+    MOZ_ENABLE_WAYLAND "1"
+    QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+}
+
+screenshot-path "~/Pictures/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+// You can also set this to null to disable saving screenshots to disk.
+// screenshot-path null
+
+animations {
+    slowdown 2.0
+    window-open {
+      duration-ms 200
+      curve "linear"
+      custom-shader r"
+    
+    vec4 expanding_circle(vec3 coords_geo, vec3 size_geo) {
+    vec3 coords_tex = niri_geo_to_tex * coords_geo;
+    vec4 color = texture2D(niri_tex, coords_tex.st);
+    vec2 coords = (coords_geo.xy - vec2(0.5, 0.5)) * size_geo.xy * 2.0;
+    coords = coords / length(size_geo.xy);
+    float p = niri_clamped_progress;
+    if (p * p <= dot(coords, coords))
+    color = vec4(0.0);
+
+    return color;
+  }
+
+    vec4 open_color(vec3 coords_geo, vec3 size_geo) {
+    return expanding_circle(coords_geo, size_geo);
+   }
+  "
+ }
+
+   window-close {
+      duration-ms 250
+      curve "linear"
+      custom-shader r"
+
+    vec4 fall_and_rotate(vec3 coords_geo, vec3 size_geo) {
+    float progress = niri_clamped_progress * niri_clamped_progress;
+    vec2 coords = (coords_geo.xy - vec2(0.5, 1.0)) * size_geo.xy;
+    coords.y -= progress * 1440.0;
+    float random = (niri_random_seed - 0.5) / 2.0;
+    random = sign(random) - random;
+    float max_angle = 0.5 * random;
+    float angle = progress * max_angle;
+    mat2 rotate = mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
+    coords = rotate * coords;
+    coords_geo = vec3(coords / size_geo.xy + vec2(0.5, 1.0), 1.0);
+    vec3 coords_tex = niri_geo_to_tex * coords_geo;
+    vec4 color = texture2D(niri_tex, coords_tex.st);
+
+    return color;
+  }
+
+    vec4 close_color(vec3 coords_geo, vec3 size_geo) {
+    return fall_and_rotate(coords_geo, size_geo);
+     }
+    "
+   }
+}
+
+overview {
+    zoom 0.25
+    backdrop-color "#777777"
+    workspace-shadow {
+        off
+    }
+}
+
+window-rule {
+    geometry-corner-radius 8
+    clip-to-geometry true
+}
+
+window-rule {
+    match app-id=r#"^org\.keepassxc\.KeePassXC$"#
+    block-out-from "screen-capture"
+
+    // block-out-from "screencast"
+}
+
+window-rule {
+    draw-border-with-background false
+    match is-active=true
+    match is-active=false
+    opacity 0.85
+}
+
+window-rule {
+    match app-id="libreoffice-calc"
+    match app-id="org.keepassxc.KeePassXC"
+    match app-id="firefox"
+    match app-id="org.pwmt.zathura"
+    match app-id="galculator"
+    opacity 0.95
+}
+
+window-rule {
+    match app-id="mpv"
+    match title="swayimg"
+    opacity 1.0
+}
+
+window-rule {
+   match app-id="foot$"
+   match app-id="thunar$"
+   match app-id="mpv$"
+   match app-id="mousepad$"
+   match app-id="org.qutebrowser.qutebrowser$"
+   match app-id="firefox$"
+   open-maximized true
+   // default-column-width { fixed 1300; }
+}
+
+window-rule {
+    match app-id="org.keepassxc.KeePassXC"
+    match app-id="audacious"
+    match app-id="goodvibes"
+    match app-id="de.haeckerfelix.Shortwave"
+    match app-id="qbittorrent"
+    match app-id="galculator"
+    match app-id="com.github.wwmm.easyeffects"
+    open-floating true
+}
+
+window-rule {
+    match app-id="thunar" title="File Operation Progress"
+    match app-id="firefox" title="Opening .*"
+    match app-id="firefox" title="About LibreWolf"
+    match app-id="engramba" title="Extract .*"
+    match app-id="xfce-polkit"
+    open-floating true
+}
+
+binds {
+    Mod+Shift+A { show-hotkey-overlay; }
+    Mod+Return { spawn "kitty" "bash"; }
+    Mod+Shift+Return { spawn "kitty"; }
+    Mod+W { spawn "fuzzel"; }
+    Mod+E { spawn "thunar"; }
+    Mod+X { spawn "mousepad"; }
+    Mod+Shift+E { spawn "kitty" "/home/d1ws/.config/niri/yazi.sh"; }
+    Mod+B { spawn "firefox"; }
+    Mod+Shift+T { spawn "qbittorrent"; }
+    Mod+D { spawn "bash" "-c" "niri msg action focus-workspace media && deadbeef"; }
+    Mod+M { spawn "bash" "-c" "niri msg action focus-workspace media && goodvibes"; }
+    Mod+S { spawn "bash" "-c" "niri msg action focus-workspace media && shortwave"; }
+    Mod+Shift+M { spawn "bash" "-c" "niri msg action focus-workspace media && easyeffects"; }
+    Mod+Ctrl+L { spawn "wlogout"; }
+    Super+Alt+L { spawn "bash" "-c" "niri msg action do-screen-transition --delay-ms 350 && swaylock -f -i /home/d1ws/.walls/anime-landscape.png"; }
+    Alt+W { spawn "/home/d1ws/.config/niri/wal.sh"; }
+    Alt+B { spawn "/home/d1ws/.config/niri/swww_cyclebg.sh"; }
+    Alt+C { spawn "/home/d1ws/.config/niri/cyclecolors.sh"; }
+    Alt+S { spawn "bash" "-c" "foot --window-size-pixels=$(slurp -d | cut -d' ' -f2)"; }
+    
+    // Volume keys mappings for PipeWire & WirePlumber.
+    XF86AudioRaiseVolume  allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+    XF86AudioMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    XF86AudioMicMute allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+     
+    XF86MonBrightnessUp { spawn "brightnessctl" "set" "+10"; }
+    XF86MonBrightnessDown { spawn "brightnessctl" "set" "10-"; }
+
+    Mod+Q { close-window; }
+    Mod+O { toggle-overview; }
+
+    Mod+v { toggle-window-floating; }
+    Mod+Shift+v { switch-focus-between-floating-and-tiling; }
+
+    Mod+Left  { focus-column-left; }
+    Mod+Down  { focus-window-down; }
+    Mod+Up    { focus-window-up; }
+    Mod+Right { focus-column-right; }
+    
+    Mod+Shift+Left  { focus-column-first; }
+    Mod+Shift+Right { focus-column-last; }
+
+    Mod+Ctrl+Left  { move-column-left; }
+    Mod+Ctrl+Down  { move-window-down; }
+    Mod+Ctrl+Up    { move-window-up; }
+    Mod+Ctrl+Right { move-column-right; }
+
+    Mod+U              { focus-workspace-down; }
+    Mod+I              { focus-workspace-up; }
+    Mod+Ctrl+U         { move-column-to-workspace-down; }
+    Mod+Ctrl+I         { move-column-to-workspace-up; }
+
+    Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
+    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
+
+    Mod+WheelScrollRight      { focus-column-right; }
+    Mod+WheelScrollLeft       { focus-column-left; }
+    Mod+Ctrl+WheelScrollRight { move-column-right; }
+    Mod+Ctrl+WheelScrollLeft  { move-column-left; }
+
+    // Usually scrolling up and down with Shift in applications results in
+    // horizontal scrolling; these binds replicate that.
+    Mod+Shift+WheelScrollDown      { focus-column-right; }
+    Mod+Shift+WheelScrollUp        { focus-column-left; }
+    Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
+    Mod+Ctrl+Shift+WheelScrollUp   { move-column-left; }
+
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+    Mod+Ctrl+1 { move-column-to-workspace 1; }
+    Mod+Ctrl+2 { move-column-to-workspace 2; }
+    Mod+Ctrl+3 { move-column-to-workspace 3; }
+    Mod+Ctrl+4 { move-column-to-workspace 4; }
+    Mod+Ctrl+5 { move-column-to-workspace 5; }
+    Mod+Ctrl+6 { move-column-to-workspace 6; }
+    Mod+Ctrl+7 { move-column-to-workspace 7; }
+    Mod+Ctrl+8 { move-column-to-workspace 8; }
+    Mod+Ctrl+9 { move-column-to-workspace 9; }
+
+    // Alternatively, there are commands to move just a single window:
+    // Mod+Ctrl+1 { move-window-to-workspace 1; }
+
+    // Switches focus between the current and the previous workspace.
+    Mod+Tab { focus-workspace-previous; }
+
+    Mod+Comma  { consume-window-into-column; }
+    Mod+Period { expel-window-from-column; }
+
+    // There are also commands that consume or expel a single window to the side.
+    Mod+Ctrl+Comma  { consume-or-expel-window-left; }
+    Mod+Ctrl+Period { consume-or-expel-window-right; }
+
+    Mod+R { switch-preset-column-width; }
+    Mod+F { maximize-column; }
+    Mod+Shift+F { fullscreen-window; }
+    Mod+C { center-column; }
+
+    Mod+Minus { set-column-width "-5%"; }
+    Mod+Equal { set-column-width "+5%"; }
+
+    Mod+Shift+Minus { set-window-height "-5%"; }
+    Mod+Shift+Equal { set-window-height "+5%"; }
+    Mod+Shift+R  {reset-window-height; }
+
+    Mod+Alt+0        { set-column-width "1200"; }
+
+    Print { screenshot; }
+    Ctrl+Print { screenshot-screen; }
+    Alt+Print { screenshot-window; }
+
+    Mod+Shift+P { power-off-monitors; }
+    Mod+Shift+Q { quit skip-confirmation=true; }
+    Mod+Shift+C { quit; }
+    Mod+Z { toggle-column-tabbed-display; }
+}

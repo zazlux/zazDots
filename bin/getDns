@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#USAGE: "$0" "anydomain.com"
+
+set -euo pipefail
+
+dig "$@" | awk '/^;; ANSWER SECTION:$/ { getline ; print $5 }'

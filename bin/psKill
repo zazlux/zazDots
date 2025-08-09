@@ -1,0 +1,6 @@
+#!/usr/loal/bin/bash
+#coding:utf-8
+
+ps cax | grep "$1"
+
+if [[ -z "$1"  

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+LINK="https://www.mixcloud.com/paulvandyk/"
+
+read -p "Please choose volume level [ 0 - 70 ]? " CHOICE
+
+VOLUME=55
+
+if ! [ -z "$1" ]; then
+        VOLUME="$1"
+else
+        VOLUME="$CHOICE"
+fi
+
+
+mpv --volume="$VOLUME" "$LINK"

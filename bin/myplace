@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+
+myplace=$(dirname $(readlink -f "$0"))
+myplace2=$(dirname "$0")
+echo "$myplace"
+echo "$myplace2"

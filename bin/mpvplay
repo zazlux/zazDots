@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -e
+set -o pipefail
+set -u
+
+if [ !  -z `pgrep redshift` ]; then 
+     pkill redshift 
+     mpv "$@"
+     wait
+     echo "playing is over..."
+     echo "Starting reshift now ...."
+     redshift & disown
+else
+     mpv "$@"
+fi

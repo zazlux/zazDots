@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Just chmod +x's whatever's passed to it.
+# Exists as a tiny script so that the .bashrc loads faster :)
+
+chmod +x "$@"
+
+

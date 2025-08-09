@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+qutebrowser 'https://archive.org/details/unixawksedprogra0000pats/page/n6/mode/1up?view=theater' 2>/dev/null
+

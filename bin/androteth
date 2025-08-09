@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# this will work if your device has names like enp0s20u12 enp0s20u08 and so on.
+# edit it based on your case.
+
+clear && printf '\n'
+
+interface=$(ip a | awk -F: '$0 ~ "enp0" {print $2}')
+
+if [ -z "$interface" ]; then 
+   echo "no interface available"
+   echo "Check your device."
+   echo "and make sure usb tethering enabled on your phone."
+   sleep 1
+   exit 3
+fi
+
+if [[ "$interface" =~  (enp0s20u) ]]; then
+    sudo dhcpcd $interface | xargs -n1 upSideDown.pl
+else
+    printf '%s\n' "Something wrong"
+    exit 3
+fi
+
+clear && printf '\n'
+printf "%s\n" "Connected with success !!..."

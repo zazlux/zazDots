@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+ lynx --dump https://github.com/yt-dlp/yt-dlp | awk '/Latest/{print $0}' | tail -1
+

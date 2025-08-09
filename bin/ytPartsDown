@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+[ $(command -v yt-dlp) ] || echo "yt-dlp is not installed!"
+
+URL="$1"
+
+if [ -z "$URL" ]; then 
+    echo "No URL is provided!"
+    exit 3
+fi
+
+
+[[ "$URL" =~ "playlist" ]] || echo "wrong link!"
+
+
+while true; do
+        echo "List of option to choose: "
+        echo "1 - Download from a number to another one."
+        echo "2 - Download the first N list."
+        echo "3 - Download from N list to the end."
+        echo "4 - Download on reverse from the end to N list."
+        echo "5 - Download a range from N to N list (N,N,N)."
+        echo "6 - Download a range from N to N list (N-N)."
+        echo "* - exiting."
+
+read -p "Please enter an option, a number ? "
+
+case "$REPLY" in
+          1) read -p "Please enter the start number ? " choice1  
+             read -p "please enter the end number ? " choice2
+             yt-dlp -c -f22 --playlist-start "$choice1" --playlist-end "$choice2" "$URL"        
+            ;;
+          2) read -p "Please enter the end number ? " choice2
+             yt-dlp -c -f22 --playlist-end "$choice2" "$URL"
+            ;; 
+          3) read -p "Please enter th start number ? " choice1
+             yt-dlp -c -f22 --playlist-start "$choice1" "$URL"
+            ;;
+          4) read -p "Please the end number ? " choice2
+             yt-dlp -c -f22 --playlist-end "$choice2" --playlist-reverse "$URL"
+            ;;
+          5) read -p "Please enter a range of different number (like 2,6,9) ? " choice3
+             yt-dlp -c -f22 --playlist-items "$choice3" "$URL"
+            ;;
+          6) read -p "Please enter a range of numbers (like 2-7) ? " choice4
+             yt-dlp -c -f22 --playlist-items "$choice4" "$URL"
+            ;; 
+          *) echo "unknown choice!"
+              exit 3
+esac
+done

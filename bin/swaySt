@@ -1,0 +1,4 @@
+#!/usr/local/bin/bash
+#coding:utf-8
+
+source $HOME/.bashrc && source $HOME/.local/bin/swayStart

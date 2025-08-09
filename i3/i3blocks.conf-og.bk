@@ -1,0 +1,66 @@
+# i3blocks config file
+#
+# Please see man i3blocks for a complete reference!
+# The man page is also hosted at http://vivien.github.io/i3blocks
+#
+# List of valid properties:
+#
+# align
+# color
+# command
+# full_text
+# instance
+# interval
+# label
+# min_width
+# name
+# separator
+# separator_block_width
+# short_text
+# signal
+# urgent
+
+# Global properties
+#
+# The top properties below are applied to every block, but can be overridden.
+# Each block command defaults to the script name to avoid boilerplate.
+command=/usr/share/i3blocks/$BLOCK_NAME
+separator_block_width=14
+
+[cpu_usage]
+label= 
+command=/usr/share/i3blocks/cpu_usage
+interval=3
+color=#29b6f6
+
+[memory]
+label= 
+command=/usr/share/i3blocks/memory
+interval=3
+color=#00bfa5
+
+[hdd]
+label= 
+command=/usr/share/i3blocks/disk $HOME
+instance=/home/d1ws
+interval=30
+color=#ffc400
+
+[network]
+label= 
+command=/usr/share/i3blocks/bandwidth
+interval=3
+color=#64b5f6
+
+[caps-lock]
+label= 
+command=pxset -q | grep Caps | awk '{ print $4 }'
+interval=20
+signal=10
+
+
+[time]
+label= 
+command=date '+%A %d %b %R'
+interval=5
+color=#d3dae3

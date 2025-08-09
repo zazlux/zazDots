@@ -1,0 +1,24 @@
+#!/bin/bash
+###########################################
+# Copyright (C) 2005 Patrick A. Read
+#
+# louder - this shell script increases
+# the volume of the Master playback control
+# in alsamixer.  Usage: louder [number]
+# where (optional) number is 10 or 20 max 100 you wish to increase the volume.
+# Example:  louder 10 up the volume
+# 10%.  If you do not specify a
+# number, then louder will raise the
+# volume one step.  NOTE: amixer uses
+# 63 steps (0-64) in its volume controls.
+###########################################
+
+if [ "$1" != "" ]
+then
+	VOLADJ=${1}%+
+else
+	VOLADJ="10%+"
+fi
+
+amixer set Master ${VOLADJ}
+exit 0

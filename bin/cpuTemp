@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+sensors | awk '/[Pp]ackage id 0:/ {gsub("+", ""); print $4}' | lolcat -v 0.3
+

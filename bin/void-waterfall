@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+qutebrowser "https://build.voidlinux.org/waterfall" 2>/dev/null & disown

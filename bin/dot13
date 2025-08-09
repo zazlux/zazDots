@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+set -o pipefail
+set -u
+
+
+cd '/home/d1ws/Games/Magic.The.Gathering.Duels.of.the.Planeswalkers.2013/sr-mtgdotp2013/drive_c/Program Files (x86)/Wizards of the Coast LLC/Magic The Gathering - Duels of the Planeswalkers 2013/'
+
+$HOME/Downloads/wine-10.12-amd64/bin/wine DotP_D13.exe 2&>1  & disown

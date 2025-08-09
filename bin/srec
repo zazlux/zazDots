@@ -1,0 +1,27 @@
+
+
+#!/usr/bin/bash
+#
+# Captures a screen recording with system audio and microphone.
+
+if [ -z "$1" ] || [ -z "$2" ]; then
+     echo "Usage: cap <output frame rate> <filename.ext>"
+     echo "The type of video file will be determined by the extension."
+     exit 1
+fi
+
+BITRATE="16M"
+BUFSIZE="10M"
+FRAMERATE="$1"
+PROBESIZE="30M"
+PROG="/usr/bin/ffmpeg"
+SYNC="/usr/bin/sync"
+
+"$PROG" -f x11grab -r 60 -probesize "$PROBESIZE" -video_size 1680x1050 -i :0.0 -r "$FRAMERATE" -b:v "$BITRATE" -minrate "$BITRATE" -maxrate "$BITRATE" -bufsize "$BUFSIZE" -f pulse -ac 2 -i default -f pulse -ac 2 -i alsa_input.pci-0000_00_1b.0.analog-stereo -filter_complex "[0:a][1:a]amerge=inputs=2[a]" -map 0:v -map "[a]" "$2"
+
+"$SYNC"
+
+exit 0
+
+# EOF
+

@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# script to play youtube videos without download.
+# requirements: ffmpeg, yt-dlp, mpv.
+set -euo pipefail
+
+# checking arguments.if you didnt provide any URL.we exit the script:
+if [ "$#" -lt 1 ]; then
+    echo "USAGE: '\$0' URL"
+    exit 3
+fi
+
+# checking yt-dlp if it's installed:
+if [ ! $(command -v yt-dlp) ]; then
+    echo "You need to install yt-dlp!!" 
+    exit 3
+else
+# playing your link now with yt-dlp (using ffmpeg and mpv):
+    yt-dlp -o - "$1" | ffplay -
+fi

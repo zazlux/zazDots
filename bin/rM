@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -e
+set -o pipefail
+set -u
+
+printf '%s\n' "You know who i am!!"
+printf '%s\n' "Don't do anything stupid!"
+read -p "You sure you want to do this ? " YN 
+case "$YN" in
+        y|Y) 
+             /usr/bin/rm -i "$@"
+           ;;
+         n|N)
+             break
+            ;;  
+          *) 
+             printf '%s\n' "Wrong option!!" 
+            ;;
+            
+esac

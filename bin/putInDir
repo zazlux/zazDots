@@ -1,0 +1,6 @@
+#!/bin/bash
+
+dir="$1/"
+shift
+mkdir -p "$dir"
+mv -vn "$@" "$dir"

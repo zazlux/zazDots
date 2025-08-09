@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+
+
+yt-dlp -x --audio-quality 0 \
+--add-metadata \
+--compat-options embed-metadata \
+-f "ba" --embed-thumbnail \
+-v --ppa "ThumbnailsConvertor+ffmpeg_o:-c:v png -vf crop='ih'" \
+--exec ffprobe --audio-format=mp3 --output "%(title)s.%(ext)s" \
+--external-downloader aria2c \
+--external-downloader-args '-c -j 3 -x 3 -s 3 -k 1M' "$1"

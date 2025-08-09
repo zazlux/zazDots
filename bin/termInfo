@@ -1,0 +1,4 @@
+#!/usr/local/bin/bash
+#coding:utf-8
+
+ps -p$PPID | awk '$0 !~ "COMMAND" {print $NF}'

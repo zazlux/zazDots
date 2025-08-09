@@ -1,0 +1,53 @@
+#!/usr/bin/bash
+
+
+
+# use applications.menu for main app menu
+# export XDG_MENU_PREFIX="lxqt-"
+
+# Qt platform plugin
+export QT_PLATFORM_PLUGIN="lxqt"
+
+# Qt5/Qt6 platform plugin
+export QT_QPA_PLATFORMTHEME="lxqt"
+
+# Qt5/Qt6
+export QT_QPA_PLATFORM="wayland;xcb"
+export QT_EXCLUDE_GENERIC_BEARER=1
+# export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+export QT_WAYLAND_RECONNECT=1
+export QT_AUTO_SCREEN_SCALE_FACTOR=0
+
+# Qt6
+export QT_ACCESSIBILITY=1
+
+# Toolkit Backend
+export GDK_BACKEND="wayland,x11,*"
+export CLUTTER_BACKEND="wayland,x11"
+export GTK_CSD=0
+export GTK_OVERLAY_SCROLLING=0
+
+# EFL Backend
+export ELM_DISPLAY="wl"
+
+# SDL Video Driver Backend
+export SDL_VIDEODRIVER="wayland,x11"
+
+# Java
+export _JAVA_AWT_WM_NONREPARENTING=1
+
+# XDG Session settings
+
+export XDG_CURRENT_DESKTOP=Hyprland:wlroots
+export XDG_SESSION_DESKTOP=Hyprland
+
+# EGL Platform Backend
+
+export EGL_PLATFORM="wayland,x11"
+
+
+# Ozone
+export ELECTRON_OZONE_PLATFORM_HINT=auto
+
+exec dbus-launch  Hyprland
+
